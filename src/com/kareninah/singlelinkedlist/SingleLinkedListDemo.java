@@ -23,13 +23,16 @@ public class SingleLinkedListDemo {
         System.out.println("修改后");
         list.showList();
         list.deleteById(1);
+        list.deleteById(4);
+        list.deleteById(3);
+//        list.deleteById(2);
         System.out.println("删除后");
         list.showList();
     }
 
 
     static class SingleLinkedList {
-        private HeroNode headNode;
+        private final HeroNode headNode;
 
         public SingleLinkedList() {
             headNode = new HeroNode();
@@ -68,6 +71,10 @@ public class SingleLinkedListDemo {
         //遍历
         public void showList() {
             HeroNode temp = headNode.next;
+            if (temp == null) {
+                System.out.println("链表为空");
+                return;
+            }
             while (true) {
                 if (temp == null) {
                     //遍历完毕
