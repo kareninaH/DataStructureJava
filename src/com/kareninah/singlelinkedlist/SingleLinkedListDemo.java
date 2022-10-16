@@ -11,7 +11,7 @@ public class SingleLinkedListDemo {
     public static void main(String[] args) {
         HeroNode jack = new HeroNode(1, "jack", "111");
         HeroNode tom = new HeroNode(2, "tom", "222");
-        HeroNode mark = new HeroNode(3, "mark", "333");
+        HeroNode mark = new HeroNode(20, "mark", "333");
         HeroNode mary = new HeroNode(4, "mary", "444");
         SingleLinkedList list = new SingleLinkedList();
         list.addByOrder(tom);
@@ -26,24 +26,96 @@ public class SingleLinkedListDemo {
 //        list.deleteById(4);
 //        list.deleteById(3);
 //        list.deleteById(2);
-        System.out.println("删除后");
-        list.showList();
-        System.out.println("链表反转");
-        list.reverse();
-        list.showList();
+//        System.out.println("删除后");
+//        list.showList();
+//        System.out.println("链表反转");
+//        list.reverse();
+//        list.showList();
+
+        HeroNode jack1 = new HeroNode(5, "jack", "111");
+        HeroNode tom1 = new HeroNode(3, "tom", "222");
+        HeroNode mark1 = new HeroNode(7, "mark", "333");
+        HeroNode mary1 = new HeroNode(8, "mary", "444");
+        SingleLinkedList list1 = new SingleLinkedList();
+        list1.addByOrder(jack1);
+        list1.addByOrder(tom1);
+        list1.addByOrder(mark1);
+        list1.addByOrder(mary1);
+        System.out.println("list1");
+        list1.showList();
+
+        System.out.println("合并");
+        SingleLinkedList list2 = unionSingleLinkedList(list, list1);
+        assert list2 != null;
+        System.out.println("合并后");
+        list2.showList();
     }
 
 
+    //合并俩个有序列表, 结果任然有序
+    public static SingleLinkedList unionSingleLinkedList(SingleLinkedList list1, SingleLinkedList list2) {
+        if (list1.getHeadNode().next == null) {
+            System.out.println("参数一列表为空");
+            return null;
+        }
+        if (list2.getHeadNode().next == null) {
+            System.out.println("参数二列表为空");
+            return null;
+        }
+        SingleLinkedList list = new SingleLinkedList();
+        list = list1;
+        HeroNode temp2 = list2.getHeadNode().next;
+        HeroNode temp = list.getHeadNode();
+        HeroNode next;
+        while (true) {
+            if (temp2 == null) {
+                break;
+            }
+            boolean flag = false;
+            while (true) {
+                if (temp.next == null) {
+                    break;
+                }
+                if (temp.next.id > temp2.id) {
+                    break;
+                }
+                if (temp.next.id == temp2.id) {
+                    flag = true;
+                    break;
+                }
+                temp = temp.next;
+            }
+            if (flag) {
+                System.out.println("当前id已有数据");
+            } else {
+                next = temp2.next;
+                temp2.next = temp.next;
+                temp.next = temp2;
+                temp2 = next;
+            }
+        }
+
+        return list;
+    }
+
     static class SingleLinkedList {
-        private final HeroNode headNode;
+        private HeroNode headNode;
 
         public SingleLinkedList() {
             headNode = new HeroNode();
         }
 
+        public HeroNode getHeadNode() {
+            return headNode;
+        }
+
+        public void setHeadNode(HeroNode headNode) {
+            this.headNode = headNode;
+        }
+
         //按id顺序添加
         public void addByOrder(HeroNode heroNode) {
-            HeroNode temp = headNode;
+            HeroNode temp = this.headNode;
             //记录id是否重复
             boolean flag = false;
 
@@ -54,7 +126,7 @@ public class SingleLinkedListDemo {
                     break;
                 }
                 if (temp.next.id > heroNode.id) {
-                    //当前节点的下一节点id大于出入的节点id, 可添加
+                    //当前节点的下一节点id大于传入的节点id, 可添加
                     break;
                 } else if (temp.next.id == heroNode.id) {
                     //id重复
@@ -87,6 +159,7 @@ public class SingleLinkedListDemo {
                 temp = temp.next;
             }
         }
+
         //修改id相等的节点信息
         public void update(HeroNode heroNode) {
             HeroNode temp = headNode;
@@ -103,6 +176,7 @@ public class SingleLinkedListDemo {
                 temp = temp.next;
             }
         }
+
         //根据id删除节点
         public void deleteById(int id) {
             HeroNode temp = headNode;
