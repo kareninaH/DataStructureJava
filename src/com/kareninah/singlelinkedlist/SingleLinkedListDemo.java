@@ -22,11 +22,14 @@ public class SingleLinkedListDemo {
         list.update(new HeroNode(4, "mary4", "4"));
         System.out.println("修改后");
         list.showList();
-        list.deleteById(1);
-        list.deleteById(4);
-        list.deleteById(3);
+//        list.deleteById(1);
+//        list.deleteById(4);
+//        list.deleteById(3);
 //        list.deleteById(2);
         System.out.println("删除后");
+        list.showList();
+        System.out.println("链表反转");
+        list.reverse();
         list.showList();
     }
 
@@ -114,6 +117,29 @@ public class SingleLinkedListDemo {
                 }
                 temp = temp.next;
             }
+        }
+
+        //链表反转
+        public void reverse() {
+            //定义一个临时头结点
+            HeroNode reverseHead = new HeroNode();
+            HeroNode cur = headNode.next;
+            HeroNode next;
+            while (true) {
+                //遍历原链表
+                if (cur == null) {
+                    //遍历完毕
+                    break;
+                }
+                //将头节点的next指向当前遍历节点的下一个节点
+                next = cur.next;
+                //将当前遍历的节点, 插入到临时头结点和next中间, 即放在链表最前端
+                cur.next = reverseHead.next;
+                reverseHead.next = cur;
+                cur = next;
+            }
+            //最后将原头结点的next指向临时头结点的next
+            headNode.next = reverseHead.next;
         }
     }
 
